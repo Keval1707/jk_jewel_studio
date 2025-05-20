@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./jkjewelstudio-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "9194:9194"
+    networks:
+      - jkjewel-network
+
+  backend:
+    build:
+      context: ./JK-Backend
+      dockerfile: Dockerfile
+    ports:
+      - "9195:9195"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/jkjewelstudio
+    depends_on:
+      - mongo
+    networks:
+      - jkjewel-network
+
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "9196:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - jkjewel-network
+
+volumes:
+  mongo-data:
+
+networks:
+  jkjewel-network:
+    driver: bridge

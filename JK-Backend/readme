@@ -1,0 +1,69 @@
+
+
+## 🧪 REST API Endpoints
+
+> 🔗 **Base URL:** `http://localhost:5000`
+
+---
+
+### 📦 Product APIs (`/product`)
+
+| Method | Endpoint       | Description                     | Body Params               |
+| ------ | -------------- | ------------------------------- | ------------------------- |
+| GET    | `/product`     | Get all products                | –                         |
+| GET    | `/product/:id` | Get product by ID               | –                         |
+| POST   | `/product`     | Add a new product with image(s) | ✅ `form-data` (see below) |
+| PUT    | `/product/:id` | Update a product by ID          | ✅ Yes                     |
+| DELETE | `/product/:id` | Delete a product by ID          | –                         |
+
+#### 📤 POST `/product` (with images)
+
+Use `multipart/form-data` with the following fields:
+
+| Field    | Type     | Description                 |
+| -------- | -------- | --------------------------- |
+| id       | Number   | Product ID                  |
+| name     | String   | Product name                |
+| sku      | String   | SKU                         |
+| desc     | String   | Description                 |
+| price    | Number   | Price                       |
+| discount | String   | Discount                    |
+| material | String   | Material (e.g., "14K Gold") |
+| stock    | Boolean  | In stock or not             |
+| rating   | Number   | Rating (e.g., 4.5)          |
+| reviews  | Number   | Number of reviews           |
+| category | ObjectId | Category ID (MongoDB ID)    |
+| **img**  | File(s)  | Upload multiple image files |
+
+✅ Images will be saved in `/upload`, and URLs will look like:
+`http://localhost:5000/upload/<filename>`
+
+---
+
+### 🗂️ Category APIs (`/category`)
+
+| Method | Endpoint        | Description        | Body Params |
+| ------ | --------------- | ------------------ | ----------- |
+| GET    | `/category`     | Get all categories | –           |
+| GET    | `/category/:id` | Get category by ID | –           |
+| POST   | `/category`     | Add a new category | ✅ Yes       |
+| PUT    | `/category/:id` | Update a category  | ✅ Yes       |
+| DELETE | `/category/:id` | Delete a category  | –           |
+
+**POST / PUT body example (JSON):**
+
+```json
+{
+  "name": "Rings",
+  "description": "All ring collections"
+}
+```
+
+---
+
+### 🧰 Extra (Root Test)
+
+| Method | Endpoint | Description           |
+| ------ | -------- | --------------------- |
+| GET    | `/`      | API health check root |
+
