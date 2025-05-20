@@ -3,7 +3,7 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./jkjewelstudio-frontend
+      context: ./jkjewelstudio
       dockerfile: Dockerfile
     ports:
       - "9194:9194"
