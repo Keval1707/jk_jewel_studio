@@ -7,7 +7,6 @@ const Navbar = () => {
   const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    // Fetch admin info to check login status and get username
     fetchAdminInfo()
       .then((res) => {
         setUsername(res.data.email);

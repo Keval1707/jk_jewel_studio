@@ -1,5 +1,7 @@
 const PlaceOrder = require("../models/PlaceOrder");
 const Product = require("../models/Product");
+const { sendMail } = require("../services/mailService"); // ✅ Import mail service
+
 
 exports.placeOrder = async (req, res) => {
   try {
@@ -47,6 +49,18 @@ exports.placeOrder = async (req, res) => {
     });
 
     await order.save();
+
+    await sendMail({
+      to: user.email,
+      subject: "Your Order Confirmation",
+      html: `
+        <h2>Thank you for your order, ${user.name}!</h2>
+        <p>We’ve received your order and are currently processing it.</p>
+        <p><strong>Order ID:</strong> ${order._id}</p>
+        <p><strong>Total:</strong> $${grandTotal.toFixed(2)}</p>
+        <p>We’ll notify you once it’s shipped!</p>
+      `,
+    });
 
     res.status(201).json({ message: "Order placed successfully", order });
   } catch (error) {
@@ -107,6 +121,18 @@ exports.updatestauts = async (req, res) => {
 
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
+    }
+
+    if (order.user?.email) {
+      await sendMail({
+        to: order.user.email,
+        subject: `Your order is now ${status}`,
+        html: `
+          <h2>Hi ${order.user.name},</h2>
+          <p>Your order <strong>₹{order._id}</strong> status has been updated to: <strong>${status}</strong>.</p>
+          <p>Thank you for shopping with us.</p>
+        `,
+      });
     }
 
     res.json({ message: "Order status updated successfully", order });

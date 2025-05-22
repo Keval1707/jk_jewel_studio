@@ -8,6 +8,8 @@ const OrderRouter = require("./OrderRouter");
 const HealthRouter = require("./healthRouter");
 const adminAuth = require('../middleware/adminAuth');
 const ReportController = require("../controllers/ReportController");
+const { sendCustomEmail } = require('../controllers/MailController');
+
 
 // Root API
 router.get("/", (req, res) => {
@@ -19,6 +21,8 @@ router.use("/product", ProductRouter);
 router.use("/category", CategoryRouter);
 router.use("/order", OrderRouter);
 router.use("/api", HealthRouter);
+router.post('/sendmail',adminAuth, sendCustomEmail);
+
 
 // Protected report route
 router.get("/report", adminAuth, ReportController.getDashboardReport);

@@ -57,8 +57,8 @@ const CategoryForm = ({ categoryId, onSave, onCancel }) => {
         <label>Description:</label>
         <textarea name="description" value={form.description} onChange={handleChange} />
       </div>
-      <button type="submit">Save</button>{" "}
-      <button type="button" onClick={onCancel}>
+      <button type="submit" className="admin-form-submit">Save</button>{" "}
+      <button type="button" className="admin-form-cancel" onClick={onCancel}>
         Cancel
       </button>
     </form>
