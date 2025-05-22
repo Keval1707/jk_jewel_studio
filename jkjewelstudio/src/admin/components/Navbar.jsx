@@ -1,34 +1,36 @@
-import React, { useEffect } from "react";
-import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchAdminInfo, logout } from "../utils/api";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const username = Cookies.get("admin-username");
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    if (!username) {
-      navigate("/admin/login");
+    // Fetch admin info to check login status and get username
+    fetchAdminInfo()
+      .then((res) => {
+        setUsername(res.data.email);
+      })
+      .catch(() => {
+        navigate("/admin/login");
+      });
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error("Logout error:", err);
     }
-  }, [username, navigate]);
+    navigate("/admin/login");
+  };
 
   return (
     <header className="admin-navbar">
       <div className="admin-navbar-actions">
         <span className="admin-navbar-username">{username || "Guest"}</span>
-        {/* <button 
-          className="admin-navbar-btn"
-          onClick={() => alert("Profile clicked")}
-        >
-          Profile
-        </button> */}
-        <button 
-          className="admin-navbar-btn admin-navbar-btn-logout"
-          onClick={() => {
-            Cookies.remove("admin-username");
-            navigate("/admin/login");
-          }}
-        >
+        <button className="admin-navbar-btn admin-navbar-btn-logout" onClick={handleLogout}>
           Logout
         </button>
       </div>

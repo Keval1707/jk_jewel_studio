@@ -47,7 +47,10 @@ const ProductList = ({ onEdit }) => {
   // Calculate displayed products for current page
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   // Calculate total pages
   const totalPages = Math.ceil(products.length / productsPerPage);
@@ -57,7 +60,8 @@ const ProductList = ({ onEdit }) => {
   };
 
   if (loading) return <div className="admin-loading">Loading products...</div>;
-  if (products.length === 0) return <div className="admin-empty-state">No products found.</div>;
+  if (products.length === 0)
+    return <div className="admin-empty-state">No products found.</div>;
 
   return (
     <>
@@ -71,6 +75,7 @@ const ProductList = ({ onEdit }) => {
             <th>Name</th>
             <th>SKU</th>
             <th>Price</th>
+            <th>Discount</th>
             <th>Stock</th>
             <th>Actions</th>
           </tr>
@@ -80,23 +85,50 @@ const ProductList = ({ onEdit }) => {
             <tr key={product._id}>
               <td>{product.name}</td>
               <td>{product.sku}</td>
-              <td>${product.price.toFixed(2)}</td>
+              <td>
+                {product.discount > 0 ? (
+                  <>
+                    <div
+                      style={{
+                        textDecoration: "line-through",
+                        color: "#999",
+                        fontSize: "14px",
+                      }}
+                    >
+                      ₹{product.price.toFixed(2)}
+                    </div>
+                    <div style={{ fontWeight: "bold", color: "#27ae60" }}>
+                      ₹
+                      {(product.price * (1 - product.discount / 100)).toFixed(
+                        2
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ fontWeight: "bold" }}>
+                    ₹{product.price.toFixed(2)}
+                  </div>
+                )}
+              </td>
+
+              <td>{product.discount}%</td>
+
               <td>{product.stock ? "Yes" : "No"}</td>
               <td>
                 <div className="admin-table-actions">
-                  <button 
+                  <button
                     className="admin-table-btn admin-table-btn-view"
                     onClick={() => handleView(product)}
                   >
                     View
                   </button>
-                  <button 
+                  <button
                     className="admin-table-btn admin-table-btn-edit"
                     onClick={() => onEdit(product._id)}
                   >
                     Edit
                   </button>
-                  <button 
+                  <button
                     className="admin-table-btn admin-table-btn-delete"
                     onClick={() => handleDelete(product._id)}
                   >
@@ -125,7 +157,9 @@ const ProductList = ({ onEdit }) => {
             <button
               key={pageNum}
               onClick={() => handlePageChange(pageNum)}
-              className={`pagination-btn ${currentPage === pageNum ? "active" : ""}`}
+              className={`pagination-btn ${
+                currentPage === pageNum ? "active" : ""
+              }`}
             >
               {pageNum}
             </button>

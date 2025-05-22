@@ -10,6 +10,7 @@ import Login from "../components/Login";
 import Jewellery from "../pages/Jewellery";
 import Products from "../components/Products";
 import CartPage from "../pages/CartPage";
+import PlaceOrder from "../components/PlaceOrder";
 
 const PublicRouter = () => (
   <>
@@ -22,6 +23,7 @@ const PublicRouter = () => (
     <Route path="/gallery" element={<Gallery />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/cart" element={<CartPage />} />
+    <Route path="/placeorder" element={<PlaceOrder />} />
   </>
 );
 

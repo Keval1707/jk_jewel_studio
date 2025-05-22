@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { login } from "../utils/api";
-import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,19 +19,13 @@ const Login = () => {
     try {
       const response = await login(email, password);
       if (response.data.status) {
-        if (response.data.status) {
-          Cookies.set("admin-username", email, { expires: 1 }); // expires in 1 day
-          navigate("/admin");
-        }
+        // No need to set cookie here, backend sets httpOnly cookie
+        navigate("/admin");
       } else {
         setError(response.data.message || "Login failed");
       }
     } catch (err) {
-      if (err.response?.data?.error) {
-        setError(err.response.data.error);
-      } else {
-        setError("An error occurred during login");
-      }
+      setError(err.response?.data?.error || "An error occurred during login");
       console.error("Login error:", err);
     } finally {
       setLoading(false);
@@ -95,28 +88,12 @@ const Login = () => {
               <input type="checkbox" id="remember" disabled={loading} />
               <label htmlFor="remember">Remember me</label>
             </div>
-            {/* <a href="/forgot-password" className="forgot-password">
-              Forgot password?
-            </a> */}
           </div>
 
-          <button
-            type="submit"
-            className="admin-login-button"
-            disabled={loading}
-          >
+          <button type="submit" className="admin-login-button" disabled={loading}>
             {loading ? <span className="login-spinner"></span> : "Sign In"}
           </button>
         </form>
-
-        {/* <div className="admin-login-footer">
-          <p>
-            Don't have an account?{" "}
-            <a href="/register" className="signup-link">
-              Request access
-            </a>
-          </p>
-        </div> */}
       </div>
     </div>
   );

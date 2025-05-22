@@ -47,6 +47,16 @@ const Sidebar = () => {
               Categories
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/admin/Order"
+              className={({ isActive }) => 
+                `admin-sidebar-link ${isActive ? 'active' : ''}`
+              }
+            >
+              Order
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </aside>

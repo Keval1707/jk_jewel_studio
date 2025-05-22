@@ -6,6 +6,7 @@ import Users from "../admin/Pages/Users";
 import Login from "../admin/Pages/Login";
 import Products from "../admin/Pages/Products";
 import Categories from "../admin/Pages/Categories";
+import OrderProducts from "../admin/Pages/OrderProducts";
 
 const AdminRouter = () => (
   <>
@@ -39,6 +40,14 @@ const AdminRouter = () => (
       element={
         <AdminLayout>
           <Categories />
+        </AdminLayout>
+      }
+    />
+    <Route
+      path="/admin/Order"
+      element={
+        <AdminLayout>
+          <OrderProducts />
         </AdminLayout>
       }
     />

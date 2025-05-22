@@ -3,41 +3,74 @@ import React, { createContext, useState, useEffect } from "react";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  // Initialize state with localStorage data if it exists
+  // Helper to parse discount string or number
+  const parseDiscount = (discount) => {
+    if (!discount) return 0;
+    if (typeof discount === "string") {
+      return parseFloat(discount.replace("%", "").trim()) || 0;
+    }
+    return discount;
+  };
+
+  // Calculate discounted price
+  const getDiscountedPrice = (price, discount) => {
+    const discountNum = parseDiscount(discount);
+    if (discountNum > 0) {
+      return price * (1 - discountNum / 100);
+    }
+    return price;
+  };
+
+  // Initialize cart from localStorage
   const [cartItems, setCartItems] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const savedCart = localStorage.getItem('cart');
+    if (typeof window !== "undefined") {
+      const savedCart = localStorage.getItem("cart");
       return savedCart ? JSON.parse(savedCart) : [];
     }
     return [];
   });
 
-  // Save to localStorage whenever cartItems changes
+  // Save cart to localStorage whenever cartItems change
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+    localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  // Add to cart: calculate and store discountedPrice
   const addToCart = (product) => {
     setCartItems((prevItems) => {
+      const discountedPrice = getDiscountedPrice(product.price, product.discount);
       const existingItem = prevItems.find((item) => item.id === product.id);
       if (existingItem) {
         return prevItems.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + (product.quantity || 1) }
+            ? { 
+                ...item, 
+                quantity: item.quantity + (product.quantity || 1),
+                discountedPrice, // Update discountedPrice in case discount changed
+              }
             : item
         );
       }
-      return [...prevItems, { ...product, quantity: product.quantity || 1 }];
+      return [
+        ...prevItems,
+        { 
+          ...product, 
+          quantity: product.quantity || 1,
+          discountedPrice,
+        },
+      ];
     });
   };
 
-  // ... rest of your CartProvider code remains the same ...
+  // Remove item from cart
   const removeFromCart = (id) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
+  // Clear all items
   const clearCart = () => setCartItems([]);
 
+  // Update quantity of an item
   const updateQuantity = (id, newQuantity) => {
     if (newQuantity < 1) return;
     setCartItems((prevItems) =>
@@ -47,9 +80,12 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  // Total item count
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Total price using discountedPrice
   const cartTotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + (item.discountedPrice || item.price) * item.quantity,
     0
   );
 

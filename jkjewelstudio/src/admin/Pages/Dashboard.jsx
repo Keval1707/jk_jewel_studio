@@ -12,6 +12,8 @@ const Dashboard = () => {
     averageRating: 0,
     totalReviews: 0,
     topCategories: [],
+    lastFiveOrders: [],
+    salesData: null,
   });
 
   const [loading, setLoading] = useState(true);
@@ -37,18 +39,10 @@ const Dashboard = () => {
   if (loading) return <div className="admin-loading">Loading dashboard...</div>;
   if (error) return <div className="admin-empty-state">{error}</div>;
 
-  // Sample sales data (not from backend)
-  const salesData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Sales",
-        data: [1200, 1900, 1500, 2000, 1800, 2200],
-        backgroundColor: "rgba(52, 152, 219, 0.5)",
-        borderColor: "rgba(52, 152, 219, 1)",
-        borderWidth: 1,
-      },
-    ],
+  // Use salesData from backend or fallback to empty data
+  const salesData = report.salesData || {
+    labels: [],
+    datasets: [],
   };
 
   // Category data from backend
@@ -83,33 +77,13 @@ const Dashboard = () => {
     ],
   };
 
-  // Sample recent activity data (not from backend)
-  const recentActivity = [
-    {
-      id: 1,
-      action: "New product added",
-      details: "Product 'Wireless Headphones' was added",
-      time: "2 hours ago",
-    },
-    {
-      id: 2,
-      action: "Order completed",
-      details: "Order #12345 was completed",
-      time: "5 hours ago",
-    },
-    {
-      id: 3,
-      action: "User registered",
-      details: "New user 'john.doe@example.com' registered",
-      time: "1 day ago",
-    },
-    {
-      id: 4,
-      action: "Category updated",
-      details: "Category 'Electronics' was updated",
-      time: "2 days ago",
-    },
-  ];
+  // Format date helper
+  const formatDate = (isoString) =>
+    new Date(isoString).toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
   return (
     <div className="admin-dashboard">
@@ -129,10 +103,10 @@ const Dashboard = () => {
           <h2>Total Categories</h2>
           <p>{report.totalCategories}</p>
         </div>
-        <div className="admin-dashboard-card">
+        {/* <div className="admin-dashboard-card">
           <h2>In Stock Items</h2>
           <p>{report.totalStockItems}</p>
-        </div>
+        </div> */}
         <div className="admin-dashboard-card">
           <h2>Average Rating</h2>
           <p>{report.averageRating.toFixed(1)}</p>
@@ -141,17 +115,16 @@ const Dashboard = () => {
           <h2>Total Reviews</h2>
           <p>{report.totalReviews}</p>
         </div>
+        <div className="admin-dashboard-card">
+          <h2>Total Orders</h2>
+          <p>{report.TotalPlaceOrder}</p>
+        </div>
       </div>
 
       <div className="admin-dashboard-graphs">
         <div className="admin-graph-container">
           <div className="admin-graph-header">
-            <h3 className="admin-graph-title">
-              Sales Overview{" "}
-              <small style={{ fontWeight: "normal", color: "#888" }}>
-                (Sample data - not from backend)
-              </small>
-            </h3>
+            <h3 className="admin-graph-title">Sales Overview</h3>
             <select
               className="admin-graph-period-selector"
               value={timePeriod}
@@ -169,9 +142,7 @@ const Dashboard = () => {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                  legend: {
-                    display: false,
-                  },
+                  legend: { display: false },
                 },
               }}
             />
@@ -188,18 +159,14 @@ const Dashboard = () => {
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: "right",
-                  },
-                },
+                plugins: { legend: { position: "right" } },
               }}
             />
           </div>
         </div>
       </div>
 
-      <div className="admin-dashboard-graphs">
+      <div className="admin-dashboard-graphs" style={{ marginTop: "2rem" }}>
         <div className="admin-graph-container">
           <div className="admin-graph-header">
             <h3 className="admin-graph-title">Stock Status</h3>
@@ -210,58 +177,54 @@ const Dashboard = () => {
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                  },
-                },
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } },
               }}
             />
           </div>
         </div>
 
-        <div className="admin-graph-container">
+        <div className="admin-graph-container" style={{ marginTop: "2rem" }}>
           <div className="admin-graph-header">
-            <h3 className="admin-graph-title">
-              Recent Orders{" "}
-              <small style={{ fontWeight: "normal", color: "#888" }}>
-                (Data visualization placeholder)
-              </small>
-            </h3>
+            <h3 className="admin-graph-title">Last 5 Orders</h3>
           </div>
-          <div className="admin-graph-placeholder">
-            Orders data visualization
+          <div>
+            {report.lastFiveOrders.length === 0 && <p>No recent orders found.</p>}
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {report.lastFiveOrders.map((order) => (
+                <li
+                  key={order._id}
+                  style={{
+                    marginBottom: "1rem",
+                    border: "1px solid #ddd",
+                    padding: "1rem",
+                    borderRadius: "6px",
+                    backgroundColor: "#f9f9f9",
+                  }}
+                >
+                  <div>
+                    <strong>Order ID:</strong> {order._id}
+                  </div>
+                  <div>
+                    <strong>User:</strong>{" "}
+                    {order.user?.name || order.user?.email || "N/A"}
+                  </div>
+                  <div>
+                    <strong>Total Amount:</strong> ₹{order.totalAmount}
+                  </div>
+                  <div>
+                    <strong>Status:</strong> {order.status}
+                  </div>
+                  <div>
+                    <strong>Ordered On:</strong> {formatDate(order.createdAt)}
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
 
-      <div className="admin-recent-activity">
-        <h3 className="admin-activity-header">
-          Recent Activity{" "}
-          <small style={{ fontWeight: "normal", color: "#888" }}>
-            (Sample data - not from backend)
-          </small>
-        </h3>
-        <ul className="admin-activity-list">
-          {recentActivity.map((activity) => (
-            <li key={activity.id} className="admin-activity-item">
-              <div className="admin-activity-icon">
-                <i className="fas fa-bell"></i>
-              </div>
-              <div className="admin-activity-text">
-                <strong>{activity.action}</strong>
-                <div>{activity.details}</div>
-              </div>
-              <div className="admin-activity-time">{activity.time}</div>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };
