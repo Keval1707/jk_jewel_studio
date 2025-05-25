@@ -33,7 +33,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 connectDB();
 
-app.use("/upload", express.static("upload"));
+app.use('/upload', express.static(path.join(__dirname, '../upload')));
+
 app.use('/', mainRouter);
 
 const PORT = process.env.PORT || 5000;
