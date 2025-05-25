@@ -20,6 +20,9 @@ services:
       - MONGO_URL=mongodb://mongo:27017/jkjewelstudio
     depends_on:
       - mongo
+    volumes:
+      - ./JK-Backend/upload:/app/upload
+
     networks:
       - jkjewel-network
 
