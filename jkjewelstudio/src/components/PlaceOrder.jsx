@@ -1,26 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // <-- import useLocation
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import DeliveryForm from "../components/DeliveryForm";
 import { postPlaceOrder } from "../utils/api";
 
 const PlaceOrder = () => {
-  const { cartItems, cartTotal, cartCount, clearCart, setCartItems } =
-    useContext(CartContext);
+  const { cartItems, cartTotal, cartCount, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Local state for order items - default to cart items
   const [orderItems, setOrderItems] = useState(cartItems);
   const [orderTotal, setOrderTotal] = useState(cartTotal);
   const [orderCount, setOrderCount] = useState(cartCount);
-  // Calculate delivery, GST, and grand total
+  const [loading, setLoading] = useState(false); // <- loading state
+
   const deliveryFee = 50;
   const gstAmount = orderTotal * 0.18;
   const grandTotal = orderTotal + gstAmount + deliveryFee;
 
   useEffect(() => {
-    // If navigated here from "Buy Now" with a single product, replace order items
     if (location.state && location.state.singleProduct) {
       const singleProduct = location.state.singleProduct;
       setOrderItems([singleProduct]);
@@ -30,10 +28,11 @@ const PlaceOrder = () => {
   }, [location.state]);
 
   const handleFormSubmit = async (deliveryDetails) => {
+    setLoading(true); // Start loading
     try {
       const orderPayload = {
         user: {
-          userId: "guest", // Update with actual user ID if available
+          userId: "guest",
           name: deliveryDetails.fullName,
           email: deliveryDetails.email,
           phone: deliveryDetails.phone,
@@ -64,6 +63,8 @@ const PlaceOrder = () => {
     } catch (error) {
       console.error("Failed to place order:", error);
       alert("Failed to place order. Please try again later.");
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -100,7 +101,7 @@ const PlaceOrder = () => {
         ))}
       </div>
 
-      <DeliveryForm onSubmit={handleFormSubmit} />
+      <DeliveryForm onSubmit={handleFormSubmit} isSubmitting={loading} />
 
       <div className="order-summary">
         <h3>Total Items: {orderCount}</h3>

@@ -27,7 +27,7 @@ exports.placeOrder = async (req, res) => {
       items.map(async (item) => {
         const product = await Product.findById(item.product);
         if (!product) {
-          throw new Error(`Product with id ${item.product} not found`);
+          throw new Error(`Product with id ₹${item.product} not found`);
         }
         return {
           product: product._id,
@@ -57,7 +57,7 @@ exports.placeOrder = async (req, res) => {
         <h2>Thank you for your order, ${user.name}!</h2>
         <p>We’ve received your order and are currently processing it.</p>
         <p><strong>Order ID:</strong> ${order._id}</p>
-        <p><strong>Total:</strong> $${grandTotal.toFixed(2)}</p>
+        <p><strong>Total:</strong> ₹${grandTotal.toFixed(2)}</p>
         <p>We’ll notify you once it’s shipped!</p>
       `,
     });
@@ -129,7 +129,7 @@ exports.updatestauts = async (req, res) => {
         subject: `Your order is now ${status}`,
         html: `
           <h2>Hi ${order.user.name},</h2>
-          <p>Your order <strong>₹{order._id}</strong> status has been updated to: <strong>${status}</strong>.</p>
+          <p>Your order <strong>₹${order._id}</strong> status has been updated to: <strong>${status}</strong>.</p>
           <p>Thank you for shopping with us.</p>
         `,
       });

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Button";
 
-
-const DeliveryForm = ({ onSubmit }) => {
+const DeliveryForm = ({ onSubmit, isSubmitting }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -45,7 +44,7 @@ const DeliveryForm = ({ onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    if (validate()) {
+    if (!isSubmitting && validate()) {
       onSubmit(formData);
     }
   };
@@ -63,6 +62,7 @@ const DeliveryForm = ({ onSubmit }) => {
         onChange={handleChange}
       />
       {errors.fullName && <span className="error">{errors.fullName}</span>}
+
       <div className="form-row">
         <input
           className="form-group"
@@ -84,6 +84,7 @@ const DeliveryForm = ({ onSubmit }) => {
         />
         {errors.phone && <span className="error">{errors.phone}</span>}
       </div>
+
       <div className="form-row">
         <input
           className="form-group"
@@ -105,6 +106,7 @@ const DeliveryForm = ({ onSubmit }) => {
         />
         {errors.city && <span className="error">{errors.city}</span>}
       </div>
+
       <div className="form-row">
         <input
           className="form-group"
@@ -138,15 +140,14 @@ const DeliveryForm = ({ onSubmit }) => {
           <span className="error">{errors.postalCode}</span>
         )}
       </div>
-      {/* <button type="button" className="button-primary" onClick={handleSubmit}>
-        Confirm Order
-      </button> */}
+
       <Button
-                type="submit"
-                text="Confirm Order"
-                variant="primary"
-                onClick={handleSubmit}
-              />
+        type="submit"
+        text={isSubmitting ? "Placing Order..." : "Confirm Order"}
+        variant="primary"
+        onClick={handleSubmit}
+        disabled={isSubmitting}
+      />
     </div>
   );
 };

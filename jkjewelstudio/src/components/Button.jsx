@@ -1,8 +1,13 @@
 import React from 'react';
 import Fadein from "./FadeIn";
 
-
-const Button = ({ text, onClick, variant = 'primary' }) => {
+const Button = ({
+  text,
+  onClick,
+  variant = 'primary',
+  disabled = false,
+  isSubmitting = false,
+}) => {
   let buttonClass = 'button-primary'; // default
 
   if (variant === 'outline') {
@@ -12,8 +17,21 @@ const Button = ({ text, onClick, variant = 'primary' }) => {
   }
 
   return (
-    <button className={`button ${buttonClass}`} onClick={onClick}>
-      <Fadein>{text}</Fadein>
+    <button
+      className={`button ${buttonClass}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <Fadein>
+        {isSubmitting ? (
+          <>
+            <span className="loading-spinner" style={{marginRight: 8}}></span>
+            Placing Order...
+          </>
+        ) : (
+          text
+        )}
+      </Fadein>
     </button>
   );
 };
