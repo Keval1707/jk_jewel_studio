@@ -131,6 +131,29 @@ a:hover {
   gap: var(--space-sm);
 }
 
+@keyframes clickScale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.button:active,
+.Products-btn:active,
+.buy-btn:active,
+.cart-btn:active,
+.wishlist-btn:active,
+.login-button:active
+ {
+  animation: clickScale 0.2s ease;
+}
+
+
 .header {
   background-color: var(--primary-light);
   box-shadow: var(--shadow-sm);
