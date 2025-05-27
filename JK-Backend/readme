@@ -1,4 +1,3 @@
-
 ## 🧪 REST API Endpoints
 
 > 🔗 **Base URL:** `http://localhost:5000`
@@ -7,13 +6,13 @@
 
 ### 📦 Product APIs (`/product`)
 
-| Method | Endpoint       | Description                     | Body Params               | Auth    |
-| ------ | -------------- | ------------------------------- | ------------------------- | ------- |
-| GET    | `/product`     | Get all products                | –                         | ❌       |
-| GET    | `/product/:id` | Get product by ID               | –                         | ❌       |
+| Method | Endpoint       | Description                     | Body Params                | Auth     |
+| ------ | -------------- | ------------------------------- | -------------------------- | -------- |
+| GET    | `/product`     | Get all products                | –                          | ❌       |
+| GET    | `/product/:id` | Get product by ID               | –                          | ❌       |
 | POST   | `/product`     | Add a new product with image(s) | ✅ `form-data` (see below) | ✅ Admin |
 | PUT    | `/product/:id` | Update a product by ID          | ✅ `form-data` (see below) | ✅ Admin |
-| DELETE | `/product/:id` | Delete a product by ID          | –                         | ✅ Admin |
+| DELETE | `/product/:id` | Delete a product by ID          | –                          | ✅ Admin |
 
 #### 📤 POST/PUT `/product` (with images)
 
@@ -41,13 +40,13 @@ Use `multipart/form-data` with the following fields:
 
 ### 🗂️ Category APIs (`/category`)
 
-| Method | Endpoint        | Description        | Body Params |
-| ------ | --------------- | ------------------ | ----------- |
-| GET    | `/category`     | Get all categories | –           |
-| GET    | `/category/:id` | Get category by ID | –           |
-| POST   | `/category`     | Add a new category | ✅ JSON      |
-| PUT    | `/category/:id` | Update a category  | ✅ JSON      |
-| DELETE | `/category/:id` | Delete a category  | –           |
+| Method | Endpoint        | Description        | Body Params | Auth     |
+| ------ | --------------- | ------------------ | ----------- | -------- |
+| GET    | `/category`     | Get all categories | –           | ❌       |
+| GET    | `/category/:id` | Get category by ID | –           | ❌       |
+| POST   | `/category`     | Add a new category | ✅ JSON     | ✅ Admin |
+| PUT    | `/category/:id` | Update a category  | ✅ JSON     | ✅ Admin |
+| DELETE | `/category/:id` | Delete a category  | –           | ✅ Admin |
 
 #### 📤 POST / PUT body example (JSON):
 
@@ -62,11 +61,11 @@ Use `multipart/form-data` with the following fields:
 
 ### 🛒 Order APIs (`/order`)
 
-| Method | Endpoint            | Description         | Body Params        | Auth    |
-| ------ | ------------------- | ------------------- | ------------------ | ------- |
+| Method | Endpoint            | Description         | Body Params         | Auth     |
+| ------ | ------------------- | ------------------- | ------------------- | -------- |
 | POST   | `/order/place`      | Place a new order   | ✅ JSON (see below) | ❌       |
-| GET    | `/order`            | Get all orders      | –                  | ✅ Admin |
-| GET    | `/order/:id`        | Get order by ID     | –                  | ✅ Admin |
+| GET    | `/order`            | Get all orders      | –                   | ✅ Admin |
+| GET    | `/order/:id`        | Get order by ID     | –                   | ✅ Admin |
 | PUT    | `/order/status/:id` | Update order status | ✅ JSON `{status}`  | ✅ Admin |
 
 #### 📤 POST `/order/place` Body Example:
@@ -100,10 +99,10 @@ Use `multipart/form-data` with the following fields:
       "discountedPrice": 55
     }
   ],
-  "totalAmount": 150.00,
-  "deliveryFee": 10.00,
-  "gstAmount": 8.00,
-  "grandTotal": 168.00
+  "totalAmount": 150.0,
+  "deliveryFee": 10.0,
+  "gstAmount": 8.0,
+  "grandTotal": 168.0
 }
 ```
 
@@ -119,9 +118,27 @@ Use `multipart/form-data` with the following fields:
 
 ---
 
+### 🛒 Order APIs (`/order`)
+
+| Method | Endpoint       | Description       | Body Params         | Auth     |
+| ------ | -------------- | ----------------- | ------------------- | -------- |
+| POST   | `/contact` | create new inquiry | ✅ JSON (see below) | ❌       |
+| GET    | `/contact`       | Get all inquiry    | –                   | ✅ Admin |
+
+```json
+{
+  "name": "Keval Satani",
+  "email": "keval@test.com",
+  "phone": "9999999999",
+  "subject": "General Inquiry",
+  "message": "test"
+}
+```
+
+---
+
 ### 🧰 Extra (Root Test)
 
 | Method | Endpoint | Description           |
 | ------ | -------- | --------------------- |
 | GET    | `/`      | API health check root |
-
