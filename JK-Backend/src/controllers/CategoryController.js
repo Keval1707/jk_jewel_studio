@@ -2,7 +2,8 @@ const Category = require("../models/Category");
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find()
+    .select('-createdAt -updatedAt -__v');
     res.json(categories);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -11,7 +12,8 @@ const getAllCategories = async (req, res) => {
 
 const getCategoryById = async (req, res) => {
   try {
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.id)
+    .select('-createdAt -updatedAt -__v');
     if (!category) return res.status(404).json({ message: "Category not found" });
     res.json(category);
   } catch (err) {

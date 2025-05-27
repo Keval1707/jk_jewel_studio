@@ -1,20 +1,23 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";  // <-- import useNavigate
+import { useParams, useNavigate } from "react-router-dom"; // <-- import useNavigate
 import { CartContext } from "../context/CartContext";
 import { fetchProductById } from "../utils/api";
+import { useToast } from "../features/ToastContext";
 
 const Products = () => {
   const { id } = useParams();
-  const navigate = useNavigate();  // <-- initialize navigate
+  const navigate = useNavigate(); // <-- initialize navigate
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addToCart } = useContext(CartContext);
+  const { showToast } = useToast();
 
   const handleAddToCart = () => {
     if (product) {
       addToCart({ ...product, quantity: 1 });
+      showToast(`${product.name} Added to cart!`, "success")
     }
   };
 
@@ -22,7 +25,9 @@ const Products = () => {
   const handleBuyNow = () => {
     if (product) {
       // Navigate to /placeorder with product info in state
-      navigate("/placeorder", { state: { singleProduct: { ...product, quantity: 1 } } });
+      navigate("/placeorder", {
+        state: { singleProduct: { ...product, quantity: 1 } },
+      });
     }
   };
 
@@ -78,7 +83,9 @@ const Products = () => {
   };
 
   const discountPercent = parseDiscount(product.discount);
-  const discountedPrice = (product.price * (1 - discountPercent / 100)).toFixed(2);
+  const discountedPrice = (product.price * (1 - discountPercent / 100)).toFixed(
+    2
+  );
 
   return (
     <div className="product-container container">
@@ -114,7 +121,8 @@ const Products = () => {
           <strong>Material:</strong> {product.material || "N/A"}
         </p>
         <p>
-          <strong>Category:</strong> {product.category?.name || product.category || "N/A"}
+          <strong>Category:</strong>{" "}
+          {product.category?.name || product.category || "N/A"}
         </p>
         <p>
           <strong>Stock Status:</strong>{" "}
@@ -125,7 +133,8 @@ const Products = () => {
           )}
         </p>
         <p>
-          <strong>Rating:</strong> ⭐ {product.rating || "N/A"} ({product.reviews || 0} reviews)
+          <strong>Rating:</strong> ⭐ {product.rating || "N/A"} (
+          {product.reviews || 0} reviews)
         </p>
         <p>
           <strong>Price:</strong>{" "}
@@ -144,7 +153,9 @@ const Products = () => {
         </p>
 
         <div className="product-actions">
-          <button className="buy-btn Products-btn" onClick={handleBuyNow}> {/* <-- updated here */}
+          <button className="buy-btn Products-btn" onClick={handleBuyNow}>
+            {" "}
+            {/* <-- updated here */}
             Buy Now
           </button>
           <button className="cart-btn Products-btn" onClick={handleAddToCart}>

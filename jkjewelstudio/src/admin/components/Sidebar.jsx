@@ -57,6 +57,16 @@ const Sidebar = () => {
               Order
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/admin/inquiry"
+              className={({ isActive }) => 
+                `admin-sidebar-link ${isActive ? 'active' : ''}`
+              }
+            >
+              Contact
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </aside>

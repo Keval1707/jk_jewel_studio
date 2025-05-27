@@ -18,7 +18,7 @@ const PublicRouter = () => (
     <Route path="/about" element={<About />} />
     <Route path="/contact" element={<Contact />} />
     <Route path="/login" element={<Login />} />
-    <Route path="/jewellery" element={<Jewellery />} />
+    <Route path="/shop" element={<Jewellery />} />
     <Route path="/products/:id" element={<Products />} />
     <Route path="/gallery" element={<Gallery />} />
     <Route path="/profile" element={<Profile />} />

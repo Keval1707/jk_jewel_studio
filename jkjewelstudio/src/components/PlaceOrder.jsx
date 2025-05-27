@@ -2,18 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import DeliveryForm from "../components/DeliveryForm";
-import { postPlaceOrder } from "../utils/api";
+import { useToast } from "../features/ToastContext";
+
+
 
 const PlaceOrder = () => {
   const { cartItems, cartTotal, cartCount, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const showToast=  useToast();
 
   const [orderItems, setOrderItems] = useState(cartItems);
   const [orderTotal, setOrderTotal] = useState(cartTotal);
   const [orderCount, setOrderCount] = useState(cartCount);
-  const [loading, setLoading] = useState(false); // <- loading state
-
+  const [loading, setLoading] = useState(false); 
   const deliveryFee = 50;
   const gstAmount = orderTotal * 0.18;
   const grandTotal = orderTotal + gstAmount + deliveryFee;
@@ -57,14 +59,14 @@ const PlaceOrder = () => {
 
       await postPlaceOrder(orderPayload);
 
-      alert("Order confirmed! Thank you.");
+      showToast("Order confirmed! Thank you.", "success");
       clearCart();
-      navigate("/");
+      navigate("/shop");
     } catch (error) {
       console.error("Failed to place order:", error);
-      alert("Failed to place order. Please try again later.");
+      showToast("Failed to place order. Please try again later.", "error");
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
@@ -72,7 +74,7 @@ const PlaceOrder = () => {
     return (
       <div className="container cart-page empty-cart">
         <h2>No Order</h2>
-        <Link to="/jewellery" className="back-to-shop">
+        <Link to="/shop" className="back-to-shop">
           Browse Products
         </Link>
       </div>

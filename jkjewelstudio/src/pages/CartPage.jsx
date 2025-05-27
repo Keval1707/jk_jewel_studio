@@ -16,7 +16,7 @@ const CartPage = () => {
     return (
       <div className="container cart-page empty-cart">
         <h2>Your Cart is Empty</h2>
-        <Link to="/jewellery" className="back-to-shop">
+        <Link to="/shop" className="back-to-shop">
           Browse Products
         </Link>
       </div>

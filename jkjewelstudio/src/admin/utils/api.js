@@ -35,6 +35,7 @@ export const updateOrderProductStatus = (orderProductId, status) =>
 
 // REPORTS
 export const fetchReport = () => api.get("/report");
+export const fetchContact = () => api.get("/contact");
 
 // AUTH APIs
 export const login = (email, password) =>

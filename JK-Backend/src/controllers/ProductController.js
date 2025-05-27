@@ -3,7 +3,12 @@ const path = require("path");
 
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find().populate("category");
+    const products = await Product.find()
+      .select("-createdAt -updatedAt -__v")
+      .populate({
+        path: "category",
+        select: "-createdAt -updatedAt -__v",
+      });
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -12,7 +17,9 @@ const getAllProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate("category");
+    const product = await Product.findById(req.params.id)
+      .select("-createdAt -updatedAt -__v")
+      .populate({ path: "category", select: "-createdAt -updatedAt -__v" });
     if (!product) return res.status(404).json({ message: "Product not found" });
     res.json(product);
   } catch (error) {
@@ -40,9 +47,8 @@ const addNewProduct = async (req, res) => {
         (file) => `${process.env.BASE_URL}/upload/${file.filename}`
       ) || [];
 
-
     const newProduct = new Product({
-      id: require('crypto').randomUUID(),
+      id: require("crypto").randomUUID(),
       name,
       sku,
       desc,
@@ -55,13 +61,13 @@ const addNewProduct = async (req, res) => {
       category,
       img,
     });
-    
+
     const savedProduct = await newProduct.save();
 
     res.status(201).json(savedProduct);
   } catch (error) {
-    console.log("error in add new prodicts ",error);
-    
+    console.log("error in add new prodicts ", error);
+
     res.status(400).json({ error: error.message });
   }
 };
@@ -72,7 +78,6 @@ const updateProduct = async (req, res) => {
 
     // Destructure fields from body
     const {
-      
       name,
       sku,
       desc,
@@ -85,24 +90,28 @@ const updateProduct = async (req, res) => {
       category,
     } = body;
 
-
     // Parse existingImages JSON string safely
     let existingImages = [];
     if (body.existingImages) {
       try {
         existingImages = JSON.parse(body.existingImages);
         if (!Array.isArray(existingImages)) {
-          return res.status(400).json({ error: "existingImages must be an array" });
+          return res
+            .status(400)
+            .json({ error: "existingImages must be an array" });
         }
       } catch (err) {
-        return res.status(400).json({ error: "Invalid existingImages JSON format" });
+        return res
+          .status(400)
+          .json({ error: "Invalid existingImages JSON format" });
       }
     }
 
     // Map new uploaded files to URLs
-    const newImages = req.files?.map(
-      (file) => `${process.env.BASE_URL}/upload/${file.filename}`
-    ) || [];
+    const newImages =
+      req.files?.map(
+        (file) => `${process.env.BASE_URL}/upload/${file.filename}`
+      ) || [];
 
     // Prepare update object
     const updateData = {
@@ -140,9 +149,6 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ error: "Failed to update product" });
   }
 };
-
-
-
 
 const deleteProduct = async (req, res) => {
   try {

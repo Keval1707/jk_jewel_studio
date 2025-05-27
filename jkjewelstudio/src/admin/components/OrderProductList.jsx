@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { fetchOrderProducts, updateOrderProductStatus } from "../utils/api";
 import OrderView from "./OrderView";
+import { useToast } from "../../features/ToastContext";
+
 
 const OrderProductList = () => {
   const [orderProducts, setOrderProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState(null);
   const [viewingOrder, setViewingOrder] = useState(null);
+  const { showToast } = useToast();
+
 
   const loadOrderProducts = async () => {
     setLoading(true);
@@ -14,7 +18,7 @@ const OrderProductList = () => {
       const res = await fetchOrderProducts();
       setOrderProducts(res.data);
     } catch (err) {
-      alert("Failed to load order products");
+      showToast("Failed to load order products", "error");
     }
     setLoading(false);
   };
@@ -39,10 +43,10 @@ const OrderProductList = () => {
     try {
       setUpdatingId(id);
       await updateOrderProductStatus(id, newStatus);
-      alert("Status updated successfully");
+      showToast("Status updated successfully","success");
       loadOrderProducts();
     } catch (err) {
-      alert("Failed to update status");
+      showToast("Failed to update status", "error");
     } finally {
       setUpdatingId(null);
     }
@@ -55,6 +59,7 @@ const OrderProductList = () => {
 
   return (
     <div>
+      
       <table className="admin-table">
         <thead>
           <tr>

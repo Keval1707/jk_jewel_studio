@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { login } from "../utils/api";
+import {useToast} from "../../features/ToastContext"
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +11,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { showToast } = useToast();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,12 +23,15 @@ const Login = () => {
       const response = await login(email, password);
       if (response.data.status) {
         // No need to set cookie here, backend sets httpOnly cookie
+        showToast("Login successful!", "success");
         navigate("/admin");
       } else {
         setError(response.data.message || "Login failed");
+        showToast("Login failed. Please check your credentials.", "error");
       }
     } catch (err) {
       setError(err.response?.data?.error || "An error occurred during login");
+      showToast("Login failed. Please check your credentials.", "error");
       console.error("Login error:", err);
     } finally {
       setLoading(false);

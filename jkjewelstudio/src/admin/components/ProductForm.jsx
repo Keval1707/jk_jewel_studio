@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   fetchProductById,
@@ -6,6 +5,8 @@ import {
   updateProduct,
   fetchCategories,
 } from "../utils/api";
+
+import { useToast } from "../../features/ToastContext";
 
 const initialForm = {
   name: "",
@@ -27,44 +28,45 @@ const ProductForm = ({ productId, onSave, onCancel }) => {
   const [existingImages, setExistingImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { showToast } = useToast();
+
   useEffect(() => {
     const loadCategories = async () => {
       try {
         const res = await fetchCategories();
         setCategories(res.data);
       } catch {
-        alert("Failed to load categories");
+        showToast("Failed to load categories", "error");
       }
     };
     loadCategories();
   }, []);
 
-useEffect(() => {
-  if (productId) {
-    const loadProduct = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetchProductById(productId);
-        const { img, category, ...rest } = res.data;
-        setForm({ 
-          ...rest, 
-          category: category?._id || "",  // <-- set category to category._id or empty string
-          img: null 
-        });
-        setExistingImages(img || []);
-      } catch {
-        alert("Failed to load product");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadProduct();
-  } else {
-    setForm(initialForm);
-    setExistingImages([]);
-  }
-}, [productId]);
-
+  useEffect(() => {
+    if (productId) {
+      const loadProduct = async () => {
+        setIsLoading(true);
+        try {
+          const res = await fetchProductById(productId);
+          const { img, category, ...rest } = res.data;
+          setForm({
+            ...rest,
+            category: category?._id || "", // <-- set category to category._id or empty string
+            img: null,
+          });
+          setExistingImages(img || []);
+        } catch {
+          showToast("Failed to load product", "error");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      loadProduct();
+    } else {
+      setForm(initialForm);
+      setExistingImages([]);
+    }
+  }, [productId]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -102,16 +104,16 @@ useEffect(() => {
 
       if (productId) {
         await updateProduct(productId, formData);
-        alert("Product updated successfully");
+        showToast("Product updated successfully", "success");
       } else {
         await createProduct(formData);
-        alert("Product created successfully");
+        showToast("Product created successfully", "success");
       }
 
       onSave();
     } catch (err) {
       console.error("Save error:", err);
-      alert("Failed to save product");
+      showToast("Failed to save product", "error");
     } finally {
       setIsLoading(false);
     }

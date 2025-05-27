@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const ProductRouter = require("./ProductRouter");
 const CategoryRouter = require("./CategoryRouter");
 const OrderRouter = require("./OrderRouter");
+const ContactRouter = require("./ContactRouter");
 const HealthRouter = require("./healthRouter");
 const adminAuth = require('../middleware/adminAuth');
 const ReportController = require("../controllers/ReportController");
@@ -21,6 +22,7 @@ router.use("/product", ProductRouter);
 router.use("/category", CategoryRouter);
 router.use("/order", OrderRouter);
 router.use("/api", HealthRouter);
+router.use('/contact', ContactRouter);
 router.post('/sendmail',adminAuth, sendCustomEmail);
 
 

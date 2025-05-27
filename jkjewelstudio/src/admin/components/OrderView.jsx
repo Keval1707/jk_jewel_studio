@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
+import InvoicePrint from "./InvoicePrint";
 
 const OrderView = ({ order, onClose }) => {
+  const printRef = useRef();
+
   if (!order) return null;
 
   const getStatusColor = (status) => {
@@ -27,7 +30,6 @@ const OrderView = ({ order, onClose }) => {
     }).format(amount);
   };
 
-  // const Order_Total= ;
 
   return (
     <div className="admin-modal-overlay">
@@ -39,11 +41,9 @@ const OrderView = ({ order, onClose }) => {
           </button>
         </div>
 
-        <div className="admin-modal-content">
+        <div className="admin-modal-content" ref={printRef}>
           <p>
             <strong>Order ID:</strong> {order._id}
-            {console.log(order)
-            }
           </p>
 
           <p>
@@ -57,7 +57,6 @@ const OrderView = ({ order, onClose }) => {
             </span>
           </p>
 
-          {/* <h4 style={{ marginTop: "20px" }}>Items</h4> */}
           <table
             className="admin-table"
             style={{ width: "100%", marginTop: "10px" }}
@@ -81,18 +80,21 @@ const OrderView = ({ order, onClose }) => {
               ))}
             </tbody>
           </table>
+
           <div className="order-view-summary">
             <p>
-              <strong>Order Total : </strong> {formatCurrency(order.totalAmount)}
+              <strong>Order Total : </strong>{" "}
+              {formatCurrency(order.totalAmount)}
             </p>
             <p>
-              <strong>Delivery Fee : </strong> {formatCurrency(order.deliveryFee)}
+              <strong>Delivery Fee : </strong>{" "}
+              {formatCurrency(order.deliveryFee)}
             </p>
             <p>
               <strong>GST (18%) : </strong> {formatCurrency(order.gstAmount)}
             </p>
             <p>
-              <strong>Grand Total  : </strong> {formatCurrency(order.grandTotal)}
+              <strong>Grand Total : </strong> {formatCurrency(order.grandTotal)}
             </p>
           </div>
         </div>
@@ -101,6 +103,7 @@ const OrderView = ({ order, onClose }) => {
           className="admin-modal-footer"
           style={{ marginTop: "20px", textAlign: "right" }}
         >
+          <InvoicePrint order={order} />
           <button
             className="admin-modal-btn admin-modal-btn-close"
             onClick={onClose}

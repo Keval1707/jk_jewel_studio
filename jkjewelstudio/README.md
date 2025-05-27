@@ -82,7 +82,7 @@ src/
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/jewellery-ecommerce.git
+   git clone https://github.com/yourusername/shop-ecommerce.git
    cd jewellery-ecommerce
    ```
 

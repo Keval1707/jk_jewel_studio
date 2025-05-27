@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchCategoryById, createCategory, updateCategory } from "../utils/api";
+import { useToast } from "../../features/ToastContext";
+
 
 const initialForm = {
   name: "",
@@ -8,6 +10,8 @@ const initialForm = {
 
 const CategoryForm = ({ categoryId, onSave, onCancel }) => {
   const [form, setForm] = useState(initialForm);
+  const { showToast } = useToast();
+
 
   useEffect(() => {
     if (categoryId) {
@@ -16,7 +20,7 @@ const CategoryForm = ({ categoryId, onSave, onCancel }) => {
           const res = await fetchCategoryById(categoryId);
           setForm(res.data);
         } catch {
-          alert("Failed to load category");
+          showToast("Failed to load category", "error");
         }
       }
       loadCategory();
@@ -35,14 +39,14 @@ const CategoryForm = ({ categoryId, onSave, onCancel }) => {
     try {
       if (categoryId) {
         await updateCategory(categoryId, form);
-        alert("Category updated successfully");
+        showToast("Category updated successfully" ,"success");
       } else {
         await createCategory(form);
-        alert("Category created successfully");
+        showToast("Category created successfully","success");
       }
       onSave();
     } catch {
-      alert("Failed to save category");
+      showToast("Failed to save category" , "error");
     }
   };
 
@@ -53,6 +57,7 @@ const CategoryForm = ({ categoryId, onSave, onCancel }) => {
         <label>Name:</label>
         <input name="name" value={form.name} onChange={handleChange} required />
       </div>
+      
       <div>
         <label>Description:</label>
         <textarea name="description" value={form.description} onChange={handleChange} />

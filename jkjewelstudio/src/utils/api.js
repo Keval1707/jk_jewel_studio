@@ -13,6 +13,7 @@ export const fetchCategories = () => api.get("/category");
 export const fetchCategoryById = (id) => api.get(`/category/${id}`);
 
 export const postPlaceOrder = (orderData) => api.post("/order/place", orderData);
+export const contact = (contactData) => api.post("/contact", contactData);
 
 
 export default api;

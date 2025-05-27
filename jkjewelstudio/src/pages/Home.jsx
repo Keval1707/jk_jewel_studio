@@ -31,16 +31,16 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-            <Fadein>
-          <h1 className="hero-title">
+          <Fadein>
+            <h1 className="hero-title">
               Beautiful, masterful design never goes out of fashion.
-          </h1>
-            </Fadein>
-            <Fadein>
-          <p className="hero-subtitle">
+            </h1>
+          </Fadein>
+          <Fadein>
+            <p className="hero-subtitle">
               Timeless jewelry crafted with passion and precision
-          </p>
-              </Fadein>
+            </p>
+          </Fadein>
           <div className="button-group">
             <Button
               text="Explore Collection"
@@ -54,8 +54,13 @@ const Home = () => {
             />
           </div>
         </div>
-        <div className="hero-image">
-          <img src="/images/hero.png" alt="Elegant jewelry display" />
+        <div className="hero-img">
+          <div className="img-wrapper">
+            <img src="./images/home/hero/1.png" alt="1" />
+          </div>
+          <div className="img-wrapper">
+            <img src="./images/home/hero/2.png" alt="2" />
+          </div>
         </div>
       </section>
 
@@ -81,12 +86,28 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="cta-section">
+        <div className="cta-image">
+          <img
+            src="./images/home/Rectangle 9.png"
+            className="cta-image"
+            alt="cta-image"
+          />
+        </div>
         <div className="cta-content">
-          <h2 className="cta-title">No limits to the lifestyle you deserve.</h2>
-          <p className="cta-text">
-            Begin your jewelry journey with a custom consultation. Share your
-            vision and we'll bring it to life.
-          </p>
+          <Fadein>
+            <h2 className="cta-title">
+              No limits to the lifestyle you deserve.
+            </h2>
+          </Fadein>
+          <Fadein>
+            <p className="cta-text">
+              Begin your jewelry journey with a custom consultation. Share your
+              vision and we'll bring it to life. Whether it's an engagement
+              ring, a meaningful gift, or a statement piece just for you — our
+              expert designers are here to craft something truly one-of-a-kind.
+            </p>
+          </Fadein>
+
           <Button
             text="Start Your Design →"
             onClick={() => (window.location.href = "/contact")}
@@ -95,36 +116,64 @@ const Home = () => {
         </div>
       </section>
 
+      <section className="contact-section">
+        <h2>Connect us on Instagram</h2>
+        <div className="contact-images">
+          <img
+            src="./images/home/Rectangle 10.png"
+            className="contact-image"
+            alt="instagram 1"
+          />
+
+          <div className="img-col">
+            <img
+              src="./images/home/Rectangle 39.png"
+              className="contact-image"
+              alt="instagram 2"
+            />
+            <img
+              src="./images/home/Rectangle 40.png"
+              className="contact-image"
+              alt="instagram 3"
+            />
+          </div>
+
+          <img
+            src="./images/home/Rectangle 42.png"
+            className="contact-image"
+            alt="instagram 4"
+          />
+        </div>
+      </section>
+
       {/* About Section */}
       <section className="about-section">
         <div className="about-content">
-            <Fadein>
-          <h2 className="section-title">
-              About Jkjewelstudio
-          </h2>
-              </Fadein>
+          <Fadein>
+            <h2 className="section-title">About Jkjewelstudio</h2>
+          </Fadein>
 
-            <Fadein>
-          <p className="about-text">
+          <Fadein>
+            <p className="about-text">
               At KJ jewel studio, we work with high-end designers (both new and
               established), retail stores, and also private clients looking for
               that perfect custom piece or engagement ring.
-          </p>
-            </Fadein>
-            <Fadein>
-          <p className="about-text">
+            </p>
+          </Fadein>
+          <Fadein>
+            <p className="about-text">
               Our studio combines over 2 years of experience with a modern focus
               on 3d printing technology. While we specialize in custom design
               and digital modeling, we're also a respected high-end jewelry
               manufacturer.
-          </p>
-            </Fadein>
-            <Fadein>
-          <p className="about-text">
+            </p>
+          </Fadein>
+          <Fadein>
+            <p className="about-text">
               Our expert team of jewelers and designers will take your custom
               design idea all the way from concept to reality.{" "}
-          </p>
-            </Fadein>
+            </p>
+          </Fadein>
           <Button
             text="Our Story →"
             onClick={() => (window.location.href = "/about")}

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchCategories, deleteCategory } from "../utils/api";
+import { useToast } from "../../features/ToastContext";
+
 
 const CategoryList = ({ onEdit }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
+
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +19,7 @@ const CategoryList = ({ onEdit }) => {
       const res = await fetchCategories();
       setCategories(res.data);
     } catch {
-      alert("Failed to load categories");
+      showToast("Failed to load categories", "error");
     }
     setLoading(false);
   };
@@ -30,7 +34,7 @@ const CategoryList = ({ onEdit }) => {
       await deleteCategory(id);
       loadCategories();
     } catch {
-      alert("Failed to delete category");
+      showToast("Failed to delete category" ,"error");
     }
   };
 

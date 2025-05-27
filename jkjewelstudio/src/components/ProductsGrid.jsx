@@ -2,16 +2,19 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import FadeIn from "./FadeIn";
+import { useToast } from "../features/ToastContext";
 
 const ProductsGrid = ({ data, categories }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const { addToCart } = useContext(CartContext);
+   const { showToast } = useToast();
   const navigate = useNavigate();
 
   const filteredData =
     selectedCategory === "All"
       ? data
       : data.filter((item) => item.category === selectedCategory);
+
 
   return (
     <div className="products-container">
@@ -20,7 +23,9 @@ const ProductsGrid = ({ data, categories }) => {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`filter-btn ${selectedCategory === category ? "active" : ""}`}
+            className={`filter-btn ${
+              selectedCategory === category ? "active" : ""
+            }`}
           >
             {category}
           </button>
@@ -49,9 +54,13 @@ const ProductsGrid = ({ data, categories }) => {
                 <p className="product-price">
                   {hasDiscount ? (
                     <>
-                      <span className="discounted-price">₹{discountedPrice}</span>{" "}
+                      <span className="discounted-price">
+                        ₹{discountedPrice}
+                      </span>{" "}
                       <span className="old-price">₹{item.price}</span>{" "}
-                      <span className="discount-tag">({item.discount} OFF)</span>
+                      <span className="discount-tag">
+                        ({item.discount} OFF)
+                      </span>
                     </>
                   ) : (
                     `$${item.price}`
@@ -64,7 +73,7 @@ const ProductsGrid = ({ data, categories }) => {
                   </Link>
                   <button
                     className="Products-btn"
-                    onClick={() => addToCart({ ...item, quantity: 1 })}
+                    onClick={() => addToCart({ ...item, quantity: 1 } ,showToast(`${item.name} Added to cart!`, "success"))}
                   >
                     Add to Cart
                   </button>

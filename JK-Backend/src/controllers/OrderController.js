@@ -2,7 +2,6 @@ const PlaceOrder = require("../models/PlaceOrder");
 const Product = require("../models/Product");
 const { sendMail } = require("../services/mailService"); // ✅ Import mail service
 
-
 exports.placeOrder = async (req, res) => {
   try {
     const { user, items, totalAmount, deliveryFee, gstAmount, grandTotal } =
@@ -69,10 +68,13 @@ exports.placeOrder = async (req, res) => {
   }
 };
 
+
+
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await PlaceOrder.find()
-      .populate("items.product")
+      .select(" -updatedAt -__v")
+      .populate({ path: "items.product", select: "name sku" })
       .sort({ createdAt: -1 });
 
     res.json(orders);
@@ -84,9 +86,10 @@ exports.getAllOrders = async (req, res) => {
 
 exports.getOrderById = async (req, res) => {
   try {
-    const order = await PlaceOrder.findById(req.params.id).populate(
-      "items.product"
-    );
+    const order = await PlaceOrder.findById(req.params.id)
+      .select(" -updatedAt -__v")
+      .populate({ path: "items.product", select: "name sku" })
+      .sort({ createdAt: -1 });
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }

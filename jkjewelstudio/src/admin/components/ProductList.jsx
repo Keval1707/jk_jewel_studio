@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { fetchProducts, deleteProduct } from "../utils/api";
 import ProductView from "./ProductView";
+import { useToast } from "../../features/ToastContext";
+
 
 const ProductList = ({ onEdit }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [viewingProduct, setViewingProduct] = useState(null);
+    const { showToast } = useToast();
+
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +21,7 @@ const ProductList = ({ onEdit }) => {
       const res = await fetchProducts();
       setProducts(res.data);
     } catch (err) {
-      alert("Failed to load products");
+      showToast("Failed to load products","error");
     }
     setLoading(false);
   };
@@ -32,7 +36,7 @@ const ProductList = ({ onEdit }) => {
       await deleteProduct(id);
       loadProducts();
     } catch (err) {
-      alert("Failed to delete product");
+      showToast("Failed to delete product","error");
     }
   };
 

@@ -7,6 +7,7 @@ import Login from "../admin/Pages/Login";
 import Products from "../admin/Pages/Products";
 import Categories from "../admin/Pages/Categories";
 import OrderProducts from "../admin/Pages/OrderProducts";
+import Contact from "../admin/Pages/Contact";
 
 const AdminRouter = () => (
   <>
@@ -48,6 +49,14 @@ const AdminRouter = () => (
       element={
         <AdminLayout>
           <OrderProducts />
+        </AdminLayout>
+      }
+    />
+    <Route
+      path="/admin/inquiry"
+      element={
+        <AdminLayout>
+          <Contact />
         </AdminLayout>
       }
     />
