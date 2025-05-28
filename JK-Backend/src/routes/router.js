@@ -7,10 +7,9 @@ const CategoryRouter = require("./CategoryRouter");
 const OrderRouter = require("./OrderRouter");
 const ContactRouter = require("./ContactRouter");
 const HealthRouter = require("./healthRouter");
-const adminAuth = require('../middleware/adminAuth');
+const adminAuth = require("../middleware/adminAuth");
 const ReportController = require("../controllers/ReportController");
-const { sendCustomEmail } = require('../controllers/MailController');
-
+const { sendCustomEmail } = require("../controllers/MailController");
 
 // Root API
 router.get("/", (req, res) => {
@@ -22,9 +21,8 @@ router.use("/product", ProductRouter);
 router.use("/category", CategoryRouter);
 router.use("/order", OrderRouter);
 router.use("/api", HealthRouter);
-router.use('/contact', ContactRouter);
-router.post('/sendmail',adminAuth, sendCustomEmail);
-
+router.use("/contact", ContactRouter);
+router.post("/sendmail", adminAuth, sendCustomEmail);
 
 // Protected report route
 router.get("/report", adminAuth, ReportController.getDashboardReport);
@@ -35,14 +33,17 @@ router.post("/admin/login", (req, res) => {
 
   // Dummy check — replace with your real admin auth logic
   if (email === "admin@admin.com" && password === "admin@admin.com") {
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+    const isProduction = process.env.NODE_ENV === "production";
 
     res
       .cookie("adminToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isProduction, // only one secure here
         maxAge: 24 * 60 * 60 * 1000, // 1 day
-        sameSite: "Lax",
+        sameSite: isProduction ? "None" : "Lax",
       })
       .json({ status: true, message: "Logged in" });
   } else {
