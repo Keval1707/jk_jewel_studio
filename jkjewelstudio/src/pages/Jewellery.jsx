@@ -13,30 +13,34 @@ const Jewellery = () => {
       setLoading(true);
       setError("");
       try {
-        // Fetch categories
         const catRes = await fetchCategories();
-        // Extract category names from response
-        const categoryNames = catRes.data.map((cat) => cat.name);
+        console.log("Categories response:", catRes);
+        const categoryNames = Array.isArray(catRes.data)
+          ? catRes.data.map((cat) => cat.name)
+          : [];
         setCategories(categoryNames);
 
-        // Fetch products
         const prodRes = await fetchProducts();
-
-        // Map product data to expected format
-        const products = prodRes.data.map((p) => ({
-          id: p._id,
-          name: p.name,
-          desc: p.desc || "",
-          price: p.price,
-          discount: p.discount ? p.discount + "%" : "", // Add % if discount exists
-          img: p.img && p.img.length > 0 ? p.img[0] : "/images/placeholder.png", // Use first image URL or placeholder
-          category: p.category?.name || "Uncategorized",
-          sku: p.sku,
-          stock: p.stock,
-          material: p.material,
-          rating: p.rating,
-          reviews: p.reviews,
-        }));
+        console.log("Products response:", prodRes);
+        const products = Array.isArray(prodRes.data)
+          ? prodRes.data.map((p) => ({
+              id: p._id,
+              name: p.name,
+              desc: p.desc || "",
+              price: p.price,
+              discount: p.discount ? p.discount + "%" : "",
+              img:
+                p.img && p.img.length > 0
+                  ? p.img[0]
+                  : "/images/placeholder.png",
+              category: p.category?.name || "Uncategorized",
+              sku: p.sku,
+              stock: p.stock,
+              material: p.material,
+              rating: p.rating,
+              reviews: p.reviews,
+            }))
+          : [];
 
         setData(products);
       } catch (err) {
