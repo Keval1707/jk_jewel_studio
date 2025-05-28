@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 
 // Whitelist CORS for specific origins
-const allowedOrigins = ["http://localhost:5173", "http://145.223.18.5:9194"];
+const allowedOrigins = ["http://localhost:5173", "http://145.223.18.5:9194" ,"https://test.technest.tech/"];
 
 const corsOptions = {
   origin: function (origin, callback) {
