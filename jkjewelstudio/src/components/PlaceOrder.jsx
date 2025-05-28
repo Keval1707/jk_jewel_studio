@@ -3,14 +3,14 @@ import { CartContext } from "../context/CartContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import DeliveryForm from "../components/DeliveryForm";
 import { useToast } from "../features/ToastContext";
-
+import {postPlaceOrder} from "../utils/api"
 
 
 const PlaceOrder = () => {
   const { cartItems, cartTotal, cartCount, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const showToast=  useToast();
+  const {showToast}=  useToast();
 
   const [orderItems, setOrderItems] = useState(cartItems);
   const [orderTotal, setOrderTotal] = useState(cartTotal);
@@ -30,7 +30,7 @@ const PlaceOrder = () => {
   }, [location.state]);
 
   const handleFormSubmit = async (deliveryDetails) => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const orderPayload = {
         user: {
@@ -56,6 +56,9 @@ const PlaceOrder = () => {
         gstAmount: gstAmount,
         grandTotal: grandTotal,
       };
+
+      console.log(orderPayload);
+      
 
       await postPlaceOrder(orderPayload);
 

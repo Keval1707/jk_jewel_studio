@@ -7,6 +7,9 @@ exports.placeOrder = async (req, res) => {
     const { user, items, totalAmount, deliveryFee, gstAmount, grandTotal } =
       req.body;
 
+      // console.log(user, items, totalAmount, deliveryFee, gstAmount, grandTotal);
+      
+
     // Check required fields
     if (
       !user ||
