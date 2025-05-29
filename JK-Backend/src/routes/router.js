@@ -68,4 +68,12 @@ router.get("/admin/me", adminAuth, (req, res) => {
   res.json({ email: req.admin.email });
 });
 
+
+router.get("/test-delay", async (req, res) => {
+  console.log("Delaying...");
+  await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
+  res.send("Done after delay");
+});
+
+
 module.exports = router;
