@@ -18,23 +18,17 @@ const allowedOrigins = ["http://localhost:5173", "http://145.223.18.5:9194" ,"ht
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log("Request Origin:", origin); // 👈 Add this line
-
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      console.log("Blocked by CORS:", origin); // 👈 Add this line
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
 };
 
-
-// app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
+app.use(cors(corsOptions));
 
 
 app.use(express.json());
