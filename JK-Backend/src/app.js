@@ -3,6 +3,8 @@ const cors = require("cors");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const path = require('path');
+const bodyParser = require('body-parser');
+
 
 
 const mainRouter = require('./routes/router');
@@ -14,7 +16,7 @@ app.use(cookieParser());
 
 
 // Whitelist CORS for specific origins
-const allowedOrigins = ["http://localhost:5173", "http://145.223.18.5:9194" ,"https://test.technest.tech"];
+const allowedOrigins = ["http://localhost:5173", "http://145.223.18.5:9194" ,"https://test.technest.tech", "https://test.technest.tech"];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -29,6 +31,10 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 
 app.use(express.json());
