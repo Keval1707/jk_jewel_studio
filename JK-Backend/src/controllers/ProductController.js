@@ -42,6 +42,13 @@ const addNewProduct = async (req, res) => {
       category,
     } = req.body;
 
+    // Validate and cast types
+    const parsedPrice = parseFloat(price);
+    const parsedDiscount = discount || "0";
+    const parsedStock = stock === "true" || stock === true;
+    const parsedRating = rating ? parseFloat(rating) : 0;
+    const parsedReviews = reviews ? parseInt(reviews) : 0;
+
     const img =
       req.files?.map(
         (file) => `${process.env.BASE_URL}/upload/${file.filename}`
@@ -52,25 +59,25 @@ const addNewProduct = async (req, res) => {
       name,
       sku,
       desc,
-      price,
-      discount,
+      price: parsedPrice,
+      discount: parsedDiscount,
       material,
-      stock,
-      rating,
-      reviews,
+      stock: parsedStock,
+      rating: parsedRating,
+      reviews: parsedReviews,
       category,
       img,
     });
 
     const savedProduct = await newProduct.save();
-
     res.status(201).json(savedProduct);
-  } catch (error) {
-    console.log("error in add new prodicts ", error);
 
+  } catch (error) {
+    console.error("error in add new product:", error);
     res.status(400).json({ error: error.message });
   }
 };
+
 
 const updateProduct = async (req, res) => {
   try {
