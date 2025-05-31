@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PublicRouter from "./router/PublicRouter";
 import AdminRouter from "./router/AdminRouter";
+import ScrollToTop from "./components/ScrollToTop";
 
 function AppContent() {
   const location = useLocation();
@@ -13,6 +14,8 @@ function AppContent() {
   return (
     <>
       {!isAdminRoute && <Header />}
+      <ScrollToTop />
+
       <main>
         <Routes>
           {PublicRouter()}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductsGrid from "../components/ProductsGrid";
 import { fetchProducts, fetchCategories } from "../utils/api";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Jewellery = () => {
   const [data, setData] = useState([]);
@@ -50,7 +51,7 @@ const Jewellery = () => {
     loadData();
   }, []);
 
-  if (loading) return <div>Loading jewellery...</div>;
+  if (loading) return <LoadingScreen/>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   return (

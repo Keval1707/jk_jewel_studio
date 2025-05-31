@@ -47,7 +47,7 @@ const CartPage = () => {
                 <h4>{item.name}</h4>
 
                 <p>
-                  Price:{" "}
+                  <strong>Price:</strong>{" "}
                   {hasDiscount ? (
                     <>
                       <span
